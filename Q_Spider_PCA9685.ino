@@ -88,6 +88,7 @@ uint16_t microsec = 0;
 char chr = 0;
 char Flag_Update = 0;
 char Moving_State = 0;
+uint16_t Delay_ms = 250;
 
 //---------------------------------------------------------------------
 void PCA9685_Control(char servo_num, unsigned int pulse_width_us);
@@ -157,7 +158,7 @@ void loop()
         Serial.print("State = ");
         Serial.println(buffer_Read[index - 1]);
 
-        Spider_Forward(buffer_Read[index - 1], 100);
+        Spider_Forward(buffer_Read[index - 1], Delay_ms);
 
         index = 0;
         Serial.println("********************END PROCESS***********************");
@@ -222,7 +223,7 @@ void Spider_Forward(char state, unsigned int delay_time)
         Front_Right(F_R_Leg_45, F_R_Foot_90);
         Back_Left((B_L_Leg_Min - 200), B_L_Foot_90);
         Back_Right((B_R_Leg_n45 - 200), B_R_Foot_90);
-        delay(delay_time*2);
+        delay(delay_time * 2);
     }
     else if (state == 4)
     {
@@ -248,7 +249,7 @@ void Spider_Forward(char state, unsigned int delay_time)
         Front_Right(F_R_Leg_0, F_R_Foot_90);
         Back_Left(B_L_Leg_n45, B_L_Foot_90);
         Back_Right(B_R_Leg_Min, B_R_Foot_90);
-        delay(delay_time*2);
+        delay(delay_time * 2);
     }
     else if (state == 9)
     {
