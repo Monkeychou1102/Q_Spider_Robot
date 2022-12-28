@@ -90,6 +90,8 @@ char Flag_Update = 0;
 char Moving_State = 0;
 uint16_t Delay_ms = 250;
 
+uint16_t Delay_ms = 250;
+
 //---------------------------------------------------------------------
 void PCA9685_Control(char servo_num, unsigned int pulse_width_us);
 void Front_Left(unsigned int leg_position, unsigned foot_position);
@@ -167,7 +169,7 @@ void loop()
 #else
     // Normal Mode
     // Forward
-    Spider_Forward(Moving_State, 250);
+    Spider_Forward(Moving_State, Delay_ms); // For Test without remote control command
     Moving_State++;
     if (Moving_State > 6)
         Moving_State = 1;
