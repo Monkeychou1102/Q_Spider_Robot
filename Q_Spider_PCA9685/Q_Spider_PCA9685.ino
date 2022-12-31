@@ -11,7 +11,7 @@
 //**************************************************************************
 // Normal Mode
 #define Control_with_Remote_Controller true
-#define Enable_Serial_To_Monitor_Joystick_State_With_Remote_Controller true
+#define Enable_Serial_To_Monitor_Joystick_State_With_Remote_Controller false
 
 // The following definitions are for debug mode
 #define Debug_Calibration_Servo_by_UART false
@@ -111,7 +111,7 @@ void loop()
         Serial.print("State = ");
         Serial.println(buffer_Read[index - 1]);
 
-        Spider_Forward(buffer_Read[index - 1], 100);
+        Spider_Forward(buffer_Read[index - 1], Servo_Delay_ms);
 
         index = 0;
         Serial.println("********************END PROCESS***********************");
@@ -129,7 +129,7 @@ void loop()
 
 #if Control_with_Remote_Controller == true
 
-    if (Event_1000ms)
+    if (Event_100ms)
     {
         NRF24L01_Receive_Data();
         Joystick_Receive_Data(RX_Buffer);
@@ -140,7 +140,7 @@ void loop()
 
         Handle_Joystick_Command();
 
-        Event_1000ms = 0;
+        Event_100ms = 0;
     }
 
 #endif
@@ -228,11 +228,23 @@ void Handle_Joystick_Command(void)
     // For this mode, only allow one command can be excuted at the same time.
     if (Read_Button_UP()) // UP Command
     {
-        ;
+        Spider_Forward(Moving_State, Servo_Delay_ms);
+
+        Moving_State++;
+        if (Moving_State > 6)
+        {
+            Moving_State = 1;
+        }
     }
     else if (Read_Button_DOWN()) // DOWN Command
     {
-        ;
+        Spider_Backward(Moving_State, Servo_Delay_ms);
+
+        Moving_State++;
+        if (Moving_State > 6)
+        {
+            Moving_State = 1;
+        };
     }
     else if (Read_Button_LEFT()) // LEFT Command
     {

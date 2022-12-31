@@ -38,7 +38,7 @@
 #define F_L_Leg_0 1150
 #define F_R_Leg_0 1700
 #define B_L_Leg_0 1500
-#define B_R_Leg_0 1000
+#define B_R_Leg_0 (1000 + 100)
 // Leg - 45 dgree
 #define F_L_Leg_45 900
 #define F_R_Leg_45 2000
@@ -47,10 +47,10 @@
 
 //-----------------Foot Angle and PWM Command Definition---------------
 // Foot - 90 dgree
-#define F_L_Foot_90 (550 + 250)  // Fine tune to improve moving performance
-#define F_R_Foot_90 (2200 - 250) // Fine tune to improve moving performance
-#define B_L_Foot_90 (2300 - 250) // Fine tune to improve moving performance
-#define B_R_Foot_90 (400 + 250)  // Fine tune to improve moving performance
+#define F_L_Foot_90 (550 + 200)  // Fine tune to improve moving performance
+#define F_R_Foot_90 (2200 - 200) // Fine tune to improve moving performance
+#define B_L_Foot_90 (2300 - 200) // Fine tune to improve moving performance
+#define B_R_Foot_90 (400 + 200)  // Fine tune to improve moving performance
 // Foot - 135 dgree
 #define F_L_Foot_135 1000
 #define F_R_Foot_135 1800
@@ -73,3 +73,5 @@ void Back_Left(unsigned int leg_position, unsigned foot_position);
 void Back_Right(unsigned int leg_position, unsigned foot_position);
 void Spider_Standby(void);
 void Spider_Release(void);
+void Spider_Forward(char state, unsigned int delay_time);
+void Spider_Backward(char state, unsigned int delay_time);
