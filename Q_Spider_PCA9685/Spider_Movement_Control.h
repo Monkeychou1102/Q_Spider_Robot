@@ -6,7 +6,7 @@
 #define SERVO_FREQ 50 // Analog servos run at ~50 Hz updates
 
 #define Dummy_Delay_ms 100
-#define Servo_Delay_ms 150
+#define Servo_Delay_ms 100
 
 // Define Servo locations on Spider Robot
 #define F_Left_Leg 4
@@ -33,14 +33,14 @@
 #define F_L_Leg_n45 1500
 #define F_R_Leg_n45 1400
 #define B_L_Leg_n45 1900
-#define B_R_Leg_n45 700
+#define B_R_Leg_n45 500
 // Leg - 0 dgree
 #define F_L_Leg_0 1150
 #define F_R_Leg_0 1700
 #define B_L_Leg_0 1500
 #define B_R_Leg_0 (1000 + 100)
 // Leg - 45 dgree
-#define F_L_Leg_45 900
+#define F_L_Leg_45 800
 #define F_R_Leg_45 2000
 #define B_L_Leg_45 1200
 #define B_R_Leg_45 1300
