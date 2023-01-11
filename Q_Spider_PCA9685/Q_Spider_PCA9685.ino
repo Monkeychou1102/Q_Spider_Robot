@@ -4,18 +4,22 @@
 #include <TimerOne.h>
 #include "NRF24L01_RX.h"
 #include "Spider_Movement_Control.h"
+#include "Joystick_RX.h"
 
-//-----------------------------------------------------------------------------------------------------
+//**************************************************************************
+//           Select Operation Mode (Debug Mode or Normal Mode)
+//**************************************************************************
+// Normal Mode
 #define Control_with_Remote_Controller true
+#define Enable_Serial_To_Monitor_Joystick_State_With_Remote_Controller false
 
-/* The following definitions are for debug mode */
+// The following definitions are for debug mode
 #define Debug_Calibration_Servo_by_UART false
 #define Debug_Remote_RX_Mode false
 #define Debug_Movement_Performenace_Self_Test false
+//**************************************************************************
 
 #define Start_Delay_ms 2000
-
-//------------------------------------------------------------------
 uint8_t index = 0;
 uint8_t buffer_Read[4] = {0};
 char chr = 0;
@@ -30,13 +34,6 @@ unsigned char Event_1ms = 0, Event_10ms = 0, Event_100ms = 0, Event_1000ms = 0;
 // Tick and Counter
 unsigned int Timer1_Tick = 0;
 unsigned int Timer1_Tick_Max = 1000; // 1000*0.1ms = 100ms
-
-//---------------------------------------------------------------------
-// JoyStick
-unsigned int X_Axis = 0, Y_Axis = 0;
-unsigned int Button_UP = 0, Button_DOWN = 0, Button_LEFT = 0, Button_RIGHT = 0;
-unsigned int Button_SELECT = 0, Button_START = 0;
-unsigned int Button_Status = 0;
 
 //---------------------------------------------------------------------
 void setup()
@@ -79,6 +76,7 @@ void setup()
     delay(Dummy_Delay_ms);
     NRF24L01_init_io();
     NRF24L01_Init_RX_Mode();
+    Joystick_Clear_Button_Status();
 #endif
 
     Spider_Standby();
@@ -113,7 +111,7 @@ void loop()
         Serial.print("State = ");
         Serial.println(buffer_Read[index - 1]);
 
-        Spider_Forward(buffer_Read[index - 1], 100);
+        Spider_Forward(buffer_Read[index - 1], Servo_Delay_ms);
 
         index = 0;
         Serial.println("********************END PROCESS***********************");
@@ -131,14 +129,18 @@ void loop()
 
 #if Control_with_Remote_Controller == true
 
-    if (Event_1000ms)
+    if (Event_100ms)
     {
         NRF24L01_Receive_Data();
-        Handle_Receive_Data(RX_Buffer);
+        Joystick_Receive_Data(RX_Buffer);
 
-        Report_Joystick_Status();
+#if Enable_Serial_To_Monitor_Joystick_State_With_Remote_Controller == true
+        Joystick_Report_Status();
+#endif
 
-        Event_1000ms = 0;
+        Handle_Joystick_Command();
+
+        Event_100ms = 0;
     }
 
 #endif
@@ -180,144 +182,90 @@ void Timer1_ISR()
     }
 }
 
-//-------------------------------------------------------------------------
-//                            Handle Receive Data
-//-------------------------------------------------------------------------
-void Handle_Receive_Data(unsigned char *Buffer)
-{
-    unsigned char Wireless_Key1 = 0, Wireless_Key2 = 0;
-    unsigned char Wireless_Key1_Num = 0x55; // Key1
-    unsigned char Wireless_Key2_Num = 0x55; // Key2
-
-    // Define the data format for JoyStick
-    // Byte_0 + Byte_1<<8 = X Axis
-    // Byte_2 + Byte_3<<8 = Y Axis
-    //             Byte_4 = Status of Buttons includes SELECT, START, UP, DOWN, LEFT and RIGHT.
-    //       Bit:    F           E           D           C           B           A           9           8           7 ~ 0
-    //             SELECT      START        LEFT        DOWN       RIGHT         UP         TBD         TBD           TBD
-
-    X_Axis = *(Buffer + 0) + *(Buffer + 1) << 8;
-    Y_Axis = *(Buffer + 2) + *(Buffer + 3) << 8;
-    Button_Status = *(Buffer + 4) << 8;
-
-    Wireless_Key1 = *(Buffer + 5);
-    Wireless_Key2 = *(Buffer + 6);
-
-    Serial.println("enter...");
-
-    if ((Wireless_Key1 != Wireless_Key1_Num) || (Wireless_Key2 != Wireless_Key2_Num))
-    {
-        Serial.println(Wireless_Key1);
-        Serial.println(Wireless_Key2);
-        Serial.println("fail...return!!");
-        return;
-    }
-
-    Serial.println("pass...");
-
-    // UP
-    if (Button_Status & 0x0400)
-    {
-        Button_UP = 0;
-    }
-    else
-    {
-        Button_UP = 1;
-    }
-
-    // DOWN
-    if (Button_Status & 0x1000)
-    {
-        Button_DOWN = 0;
-    }
-    else
-    {
-        Button_DOWN = 1;
-    }
-
-    // LEFT
-    if (Button_Status & 0x2000)
-    {
-        Button_LEFT = 0;
-    }
-    else
-    {
-        Button_LEFT = 1;
-    }
-
-    // RIGHT
-    if (Button_Status & 0x0800)
-    {
-        Button_RIGHT = 0;
-    }
-    else
-    {
-        Button_RIGHT = 1;
-    }
-
-    // SELECT
-    if (Button_Status & 0x8000)
-    {
-        Button_SELECT = 0;
-    }
-    else
-    {
-        Button_SELECT = 1;
-    }
-
-    // START
-    if (Button_Status & 0x4000)
-    {
-        Button_START = 0;
-    }
-    else
-    {
-        Button_START = 1;
-    }
-
-    //--------------------Reset Wireless Key Status---------------------------
-    // Clear Wireless_Key1 and Wireless_Key2
-    *(Buffer + 5) = 0; // Wireless_Key1
-    *(Buffer + 6) = 0; // Wireless_Key2
-}
-
 //---------------------------------------------------------------------------
 // Read Joystick AD Status and Report to PC by UART
-void Report_Joystick_Status(void)
+void Joystick_Report_Status(void)
 {
-    unsigned int X = 0;
-
     Serial.print("X:");
-    Serial.print(X_Axis);
+    Serial.print(Read_X_Axis());
     Serial.print(" ");
 
     Serial.print("Y:");
-    Serial.print(Y_Axis);
+    Serial.print(Read_Y_Axis());
     Serial.print(" ");
 
     Serial.print("UP:");
-    Serial.print(Button_UP);
+    Serial.print(Read_Button_UP());
     Serial.print(" ");
 
     Serial.print("DOWN:");
-    Serial.print(Button_DOWN);
+    Serial.print(Read_Button_DOWN());
     Serial.print(" ");
 
     Serial.print("LEFT:");
-    Serial.print(Button_LEFT);
+    Serial.print(Read_Button_LEFT());
     Serial.print(" ");
 
     Serial.print("RIGHT:");
-    Serial.print(Button_RIGHT);
+    Serial.print(Read_Button_RIGHT());
     Serial.print(" ");
 
     Serial.print("SELECT:");
-    Serial.print(Button_SELECT);
+    Serial.print(Read_Button_SELECT());
     Serial.print(" ");
 
     Serial.print("START:");
-    Serial.print(Button_START);
+    Serial.print(Read_Button_START());
     Serial.print(" ");
 
     Serial.println();
+}
+
+//----------------------------------------------------------------------------
+// Read Joystick Status
+void Handle_Joystick_Command(void)
+{
+    // For this mode, only allow one command can be excuted at the same time.
+    if (Read_Button_UP()) // UP Command
+    {
+        Spider_Forward(Moving_State, Servo_Delay_ms);
+
+        Moving_State++;
+        if (Moving_State > 6)
+        {
+            Moving_State = 1;
+        }
+    }
+    else if (Read_Button_DOWN()) // DOWN Command
+    {
+        Spider_Backward(Moving_State, Servo_Delay_ms);
+
+        Moving_State++;
+        if (Moving_State > 6)
+        {
+            Moving_State = 1;
+        };
+    }
+    else if (Read_Button_LEFT()) // LEFT Command
+    {
+        ;
+    }
+    else if (Read_Button_RIGHT()) // RIGHT Command
+    {
+        ;
+    }
+    else if (Read_Button_SELECT()) // SELECT
+    {
+        ;
+    }
+    else if (Read_Button_START()) // START
+    {
+        ;
+    }
+    else // If No Button is Pressed -> Stop Two Wheels first, then Swing Car Head controlled by SG-90
+    {
+        ;
+    }
+
+    Joystick_Clear_Button_Status(); // For avoiding the wrong instruction when the communication lose
 }
