@@ -39,7 +39,7 @@
 #define F_L_Leg_0 1150
 #define F_R_Leg_0 1700
 #define B_L_Leg_0 1500
-#define B_R_Leg_0 (1000 + 100)
+#define B_R_Leg_0 (1000 + Leg_Offset)
 // Leg - 45 dgree
 #define F_L_Leg_45 800
 #define F_R_Leg_45 2000
