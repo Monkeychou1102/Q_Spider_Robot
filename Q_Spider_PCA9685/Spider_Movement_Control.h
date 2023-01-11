@@ -6,7 +6,7 @@
 #define SERVO_FREQ 50 // Analog servos run at ~50 Hz updates
 
 #define Dummy_Delay_ms 100
-#define Servo_Delay_ms 100
+#define Servo_Delay_ms 50
 
 // Define Servo locations on Spider Robot
 #define F_Left_Leg 4
@@ -20,6 +20,7 @@
 
 //-------------Define Limited operating range for servos---------------
 //-----------------Foot Angle and PWM Command Definition---------------
+#define Leg_Offset 100
 // Max and Min
 #define F_L_Leg_Max 500
 #define F_L_Leg_Min 1700
@@ -46,16 +47,17 @@
 #define B_R_Leg_45 1300
 
 //-----------------Foot Angle and PWM Command Definition---------------
+#define Foot_Offset 200
 // Foot - 90 dgree
-#define F_L_Foot_90 (550 + 200)  // Fine tune to improve moving performance
-#define F_R_Foot_90 (2200 - 200) // Fine tune to improve moving performance
-#define B_L_Foot_90 (2300 - 200) // Fine tune to improve moving performance
-#define B_R_Foot_90 (400 + 200)  // Fine tune to improve moving performance
+#define F_L_Foot_90 (550 + Foot_Offset)  // Fine tune to improve moving performance
+#define F_R_Foot_90 (2200 - Foot_Offset) // Fine tune to improve moving performance
+#define B_L_Foot_90 (2300 - Foot_Offset) // Fine tune to improve moving performance
+#define B_R_Foot_90 (400 + Foot_Offset)  // Fine tune to improve moving performance
 // Foot - 135 dgree
-#define F_L_Foot_135 1000
-#define F_R_Foot_135 1800
-#define B_L_Foot_135 1900
-#define B_R_Foot_135 750
+#define F_L_Foot_135 (1000 + Foot_Offset)
+#define F_R_Foot_135 (1800 - Foot_Offset)
+#define B_L_Foot_135 (1900 - Foot_Offset)
+#define B_R_Foot_135 (750 + Foot_Offset)
 // Foot - 180 dgree
 #define F_L_Foot_180 1500
 #define F_R_Foot_180 1200
