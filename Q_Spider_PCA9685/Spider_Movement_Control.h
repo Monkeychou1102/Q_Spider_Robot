@@ -53,6 +53,11 @@
 #define F_R_Foot_90 (2200 - Foot_Offset) // Fine tune to improve moving performance
 #define B_L_Foot_90 (2300 - Foot_Offset) // Fine tune to improve moving performance
 #define B_R_Foot_90 (400 + Foot_Offset)  // Fine tune to improve moving performance
+// Foot - Between 90 and 135 dgree
+#define F_L_Foot_135_Low_Posture (1000)
+#define F_R_Foot_135_Low_Posture (1800)
+#define B_L_Foot_135_Low_Posture (1900)
+#define B_R_Foot_135_Low_Posture (750)
 // Foot - 135 dgree
 #define F_L_Foot_135 (1000 + Foot_Offset)
 #define F_R_Foot_135 (1800 - Foot_Offset)

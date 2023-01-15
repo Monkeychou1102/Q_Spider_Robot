@@ -74,10 +74,10 @@ void Spider_Release(unsigned int delay_time)
 //--------------------------------------------------------------------
 void Spider_Posture_Low(unsigned int delay_time)
 {
-    Front_Left(F_L_Leg_45, F_L_Foot_135);
-    Front_Right(F_R_Leg_45, F_R_Foot_135);
-    Back_Left(B_L_Leg_n45, B_L_Foot_135);
-    Back_Right(B_R_Leg_n45, B_R_Foot_135);
+    Front_Left(F_L_Leg_45, F_L_Foot_135_Low_Posture);
+    Front_Right(F_R_Leg_45, F_R_Foot_135_Low_Posture);
+    Back_Left(B_L_Leg_n45, B_L_Foot_135_Low_Posture);
+    Back_Right(B_R_Leg_n45, B_R_Foot_135_Low_Posture);
     delay(delay_time * 2);
 }
 
