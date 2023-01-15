@@ -62,20 +62,33 @@ void Back_Right(unsigned int leg_position, unsigned foot_position)
 }
 
 //--------------------------------------------------------------------
-void Spider_Release(void)
+void Spider_Release(unsigned int delay_time)
 {
     Front_Left(0, 0);
     Front_Right(0, 0);
     Back_Left(0, 0);
     Back_Right(0, 0);
+    delay(delay_time * 2);
 }
+
 //--------------------------------------------------------------------
-void Spider_Standby(void)
+void Spider_Posture_Low(unsigned int delay_time)
+{
+    Front_Left(F_L_Leg_45, F_L_Foot_135);
+    Front_Right(F_R_Leg_45, F_R_Foot_135);
+    Back_Left(B_L_Leg_n45, B_L_Foot_135);
+    Back_Right(B_R_Leg_n45, B_R_Foot_135);
+    delay(delay_time * 2);
+}
+
+//--------------------------------------------------------------------
+void Spider_Standby(unsigned int delay_time)
 {
     Front_Left(F_L_Leg_45, F_L_Foot_90);
     Front_Right(F_R_Leg_45, F_R_Foot_90);
     Back_Left(B_L_Leg_n45, B_L_Foot_90);
     Back_Right(B_R_Leg_n45, B_R_Foot_90);
+    delay(delay_time * 2);
 }
 
 //----------------------------------------------------------------------
@@ -83,7 +96,7 @@ void Spider_Forward(char state, unsigned int delay_time)
 {
     if (state == 0)
     {
-        Spider_Standby();
+        Spider_Standby(delay_time);
         delay(delay_time);
         Front_Right(F_R_Leg_45, F_R_Foot_135);
         delay(delay_time);
@@ -148,7 +161,7 @@ void Spider_Forward(char state, unsigned int delay_time)
     }
     else
     {
-        Spider_Standby();
+        Spider_Standby(delay_time);
     }
 }
 
@@ -157,7 +170,7 @@ void Spider_Backward(char state, unsigned int delay_time)
 {
     if (state == 0)
     {
-        Spider_Standby();
+        Spider_Standby(delay_time);
         delay(delay_time);
         Back_Right(B_R_Leg_Min, B_R_Foot_135);
         delay(delay_time);
@@ -222,6 +235,136 @@ void Spider_Backward(char state, unsigned int delay_time)
     }
     else
     {
-        Spider_Standby();
+        Spider_Standby(delay_time);
+    }
+}
+
+//----------------------------------------------------------------------
+void Spider_Turn_Left(char state, unsigned int delay_time)
+{
+    if (state == 0)
+    {
+        Spider_Standby(delay_time);
+    }
+    else if (state == 1)
+    {
+        Front_Left(F_L_Leg_45, F_L_Foot_135);
+        delay(delay_time);
+        Front_Left(F_L_Leg_0, F_L_Foot_135);
+        delay(delay_time);
+        Front_Left(F_L_Leg_0, F_L_Foot_90);
+        delay(delay_time);
+        Front_Left(F_L_Leg_45, F_L_Foot_90);
+        delay(delay_time);
+    }
+    else if (state == 2)
+    {
+        Front_Right(F_R_Leg_45, F_R_Foot_135);
+        delay(delay_time);
+        Front_Right(F_R_Leg_Max, F_R_Foot_135);
+        delay(delay_time);
+        Front_Right(F_R_Leg_Max, F_R_Foot_90);
+        delay(delay_time);
+        Front_Right(F_R_Leg_45, F_R_Foot_90);
+        delay(delay_time);
+    }
+    else if (state == 3)
+    {
+        Back_Right(B_R_Leg_n45, B_R_Foot_135);
+        delay(delay_time);
+        Back_Right(B_R_Leg_0, B_R_Foot_135);
+        delay(delay_time);
+        Back_Right(B_R_Leg_0, B_R_Foot_90);
+        delay(delay_time);
+        Back_Right(B_R_Leg_n45, B_R_Foot_90);
+        delay(delay_time);
+    }
+    else if (state == 4)
+    {
+        Back_Left(B_L_Leg_n45, B_L_Foot_135);
+        delay(delay_time);
+        Back_Left(B_L_Leg_Min, B_L_Foot_135);
+        delay(delay_time);
+        Back_Left(B_L_Leg_Min, B_L_Foot_90);
+        delay(delay_time);
+        Back_Left(B_L_Leg_n45, B_L_Foot_90);
+        delay(delay_time);
+    }
+    else if (state == 5)
+    {
+        ;
+    }
+    else if (state == 6)
+    {
+        ;
+    }
+    else
+    {
+        Spider_Standby(delay_time);
+    }
+}
+
+//----------------------------------------------------------------------
+void Spider_Turn_Right(char state, unsigned int delay_time)
+{
+    if (state == 0)
+    {
+        Spider_Standby(delay_time);
+    }
+    else if (state == 1)
+    {
+        Front_Left(F_L_Leg_45, F_L_Foot_135);
+        delay(delay_time);
+        Front_Left(F_L_Leg_Max, F_L_Foot_135);
+        delay(delay_time);
+        Front_Left(F_L_Leg_Max, F_L_Foot_90);
+        delay(delay_time);
+        Front_Left(F_L_Leg_45, F_L_Foot_90);
+        delay(delay_time);
+    }
+    else if (state == 2)
+    {
+        Front_Right(F_R_Leg_45, F_R_Foot_135);
+        delay(delay_time);
+        Front_Right(F_R_Leg_0, F_R_Foot_135);
+        delay(delay_time);
+        Front_Right(F_R_Leg_0, F_R_Foot_90);
+        delay(delay_time);
+        Front_Right(F_R_Leg_45, F_R_Foot_90);
+        delay(delay_time);
+    }
+    else if (state == 3)
+    {
+        Back_Right(B_R_Leg_n45, B_R_Foot_135);
+        delay(delay_time);
+        Back_Right(B_R_Leg_Min, B_R_Foot_135);
+        delay(delay_time);
+        Back_Right(B_R_Leg_Min, B_R_Foot_90);
+        delay(delay_time);
+        Back_Right(B_R_Leg_n45, B_R_Foot_90);
+        delay(delay_time);
+    }
+    else if (state == 4)
+    {
+        Back_Left(B_L_Leg_n45, B_L_Foot_135);
+        delay(delay_time);
+        Back_Left(B_L_Leg_0, B_L_Foot_135);
+        delay(delay_time);
+        Back_Left(B_L_Leg_0, B_L_Foot_90);
+        delay(delay_time);
+        Back_Left(B_L_Leg_n45, B_L_Foot_90);
+        delay(delay_time);
+    }
+    else if (state == 5)
+    {
+        ;
+    }
+    else if (state == 6)
+    {
+        ;
+    }
+    else
+    {
+        Spider_Standby(delay_time);
     }
 }

@@ -29,7 +29,7 @@
 #define B_L_Leg_Max 1000
 #define B_L_Leg_Min 2100
 #define B_R_Leg_Max 1700
-#define B_R_Leg_Min 600
+#define B_R_Leg_Min 300
 // Leg - 45 dgree
 #define F_L_Leg_n45 1500
 #define F_R_Leg_n45 1400
@@ -73,7 +73,10 @@ void Front_Left(unsigned int leg_position, unsigned foot_position);
 void Front_Right(unsigned int leg_position, unsigned foot_position);
 void Back_Left(unsigned int leg_position, unsigned foot_position);
 void Back_Right(unsigned int leg_position, unsigned foot_position);
-void Spider_Standby(void);
-void Spider_Release(void);
+void Spider_Posture_Low(unsigned int delay_time);
+void Spider_Standby(unsigned int delay_time);
+void Spider_Release(unsigned int delay_time);
 void Spider_Forward(char state, unsigned int delay_time);
 void Spider_Backward(char state, unsigned int delay_time);
+void Spider_Turn_Left(char state, unsigned int delay_time);
+void Spider_Turn_Right(char state, unsigned int delay_time);

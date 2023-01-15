@@ -19,7 +19,7 @@
 #define Debug_Movement_Performenace_Self_Test false
 //**************************************************************************
 
-#define Start_Delay_ms 2000
+#define Start_Delay_ms 1000
 uint8_t index = 0;
 uint8_t buffer_Read[4] = {0};
 char chr = 0;
@@ -78,8 +78,9 @@ void setup()
     NRF24L01_Init_RX_Mode();
     Joystick_Clear_Button_Status();
 #endif
-
-    Spider_Standby();
+    Spider_Posture_Low(Servo_Delay_ms);
+    delay(Start_Delay_ms);
+    Spider_Standby(Servo_Delay_ms);
     delay(Start_Delay_ms);
 }
 
@@ -195,27 +196,27 @@ void Joystick_Report_Status(void)
     Serial.print(" ");
 
     Serial.print("UP:");
-    Serial.print(Read_Button_UP());
+    Serial.print(Read_Button_Up());
     Serial.print(" ");
 
     Serial.print("DOWN:");
-    Serial.print(Read_Button_DOWN());
+    Serial.print(Read_Button_Down());
     Serial.print(" ");
 
     Serial.print("LEFT:");
-    Serial.print(Read_Button_LEFT());
+    Serial.print(Read_Button_Left());
     Serial.print(" ");
 
     Serial.print("RIGHT:");
-    Serial.print(Read_Button_RIGHT());
+    Serial.print(Read_Button_Right());
     Serial.print(" ");
 
     Serial.print("SELECT:");
-    Serial.print(Read_Button_SELECT());
+    Serial.print(Read_Button_Select());
     Serial.print(" ");
 
     Serial.print("START:");
-    Serial.print(Read_Button_START());
+    Serial.print(Read_Button_Start());
     Serial.print(" ");
 
     Serial.println();
@@ -226,46 +227,39 @@ void Joystick_Report_Status(void)
 void Handle_Joystick_Command(void)
 {
     // For this mode, only allow one command can be excuted at the same time.
-    if (Read_Button_UP()) // UP Command
+    if (Read_Button_Up()) // UP Command
     {
         Spider_Forward(Moving_State, Servo_Delay_ms);
-
-        Moving_State++;
-        if (Moving_State > 6)
-        {
-            Moving_State = 1;
-        }
     }
-    else if (Read_Button_DOWN()) // DOWN Command
+    else if (Read_Button_Down()) // DOWN Command
     {
         Spider_Backward(Moving_State, Servo_Delay_ms);
-
-        Moving_State++;
-        if (Moving_State > 6)
-        {
-            Moving_State = 1;
-        };
     }
-    else if (Read_Button_LEFT()) // LEFT Command
+    else if (Read_Button_Left()) // LEFT Command
     {
-        ;
+        Spider_Turn_Left(Moving_State, Servo_Delay_ms);
     }
-    else if (Read_Button_RIGHT()) // RIGHT Command
+    else if (Read_Button_Right()) // RIGHT Command
     {
-        ;
+        Spider_Turn_Right(Moving_State, Servo_Delay_ms);
     }
-    else if (Read_Button_SELECT()) // SELECT
+    else if (Read_Button_Select()) // SELECT
     {
-        ;
+        Spider_Posture_Low(Servo_Delay_ms);
     }
-    else if (Read_Button_START()) // START
+    else if (Read_Button_Start()) // START
     {
-        ;
+        Spider_Standby(Servo_Delay_ms);
     }
     else // If No Button is Pressed -> Stop Two Wheels first, then Swing Car Head controlled by SG-90
     {
         ;
     }
 
+    Moving_State++;
+    if (Moving_State > 6)
+    {
+        Moving_State = 1;
+    }
     Joystick_Clear_Button_Status(); // For avoiding the wrong instruction when the communication lose
 }
