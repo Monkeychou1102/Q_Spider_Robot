@@ -1,9 +1,17 @@
 #include "Joystick_RX.h"
 
+// Define buttons on joystick
+#define Check_Button_A_State 0x0400
+#define Check_Button_B_State 0x0800
+#define Check_Button_C_State 0x1000
+#define Check_Button_D_State 0x2000
+#define Check_Button_E_State 0x4000
+#define Check_Button_F_State 0x8000
+
 // JoyStick - Buttons
 unsigned int X_Axis = 0, Y_Axis = 0;
-bool Button_UP = 0, Button_DOWN = 0, Button_LEFT = 0, Button_RIGHT = 0;
-bool Button_SELECT = 0, Button_START = 0;
+bool Button_Up = 0, Button_Down = 0, Button_Left = 0, Button_Right = 0;
+bool Button_Select = 0, Button_Start = 0;
 unsigned int Button_Status = 0;
 
 //-------------------------------------------------------------------------
@@ -33,63 +41,63 @@ void Joystick_Receive_Data(unsigned char *Buffer)
     }
 
     // UP
-    if (Button_Status & 0x0400)
+    if (Button_Status & Check_Button_D_State)
     {
-        Button_UP = 0;
+        Button_Up = 0;
     }
     else
     {
-        Button_UP = 1;
+        Button_Up = 1;
     }
 
     // DOWN
-    if (Button_Status & 0x1000)
+    if (Button_Status & Check_Button_B_State)
     {
-        Button_DOWN = 0;
+        Button_Down = 0;
     }
     else
     {
-        Button_DOWN = 1;
+        Button_Down = 1;
     }
 
     // LEFT
-    if (Button_Status & 0x2000)
+    if (Button_Status & Check_Button_C_State)
     {
-        Button_LEFT = 0;
+        Button_Left = 0;
     }
     else
     {
-        Button_LEFT = 1;
+        Button_Left = 1;
     }
 
     // RIGHT
-    if (Button_Status & 0x0800)
+    if (Button_Status & Check_Button_A_State)
     {
-        Button_RIGHT = 0;
+        Button_Right = 0;
     }
     else
     {
-        Button_RIGHT = 1;
+        Button_Right = 1;
     }
 
     // SELECT
-    if (Button_Status & 0x8000)
+    if (Button_Status & Check_Button_F_State)
     {
-        Button_SELECT = 0;
+        Button_Select = 0;
     }
     else
     {
-        Button_SELECT = 1;
+        Button_Select = 1;
     }
 
     // START
-    if (Button_Status & 0x4000)
+    if (Button_Status & Check_Button_E_State)
     {
-        Button_START = 0;
+        Button_Start = 0;
     }
     else
     {
-        Button_START = 1;
+        Button_Start = 1;
     }
 
     //--------------------Reset Wireless Key Status---------------------------
@@ -110,45 +118,45 @@ uint16_t Read_Y_Axis(void)
     return Y_Axis;
 }
 
-bool Read_Button_UP(void)
+bool Read_Button_Up(void)
 {
-    return Button_UP;
+    return Button_Up;
 }
 
-bool Read_Button_DOWN(void)
+bool Read_Button_Down(void)
 {
-    return Button_DOWN;
+    return Button_Down;
 }
 
-bool Read_Button_LEFT(void)
+bool Read_Button_Left(void)
 {
-    return Button_LEFT;
+    return Button_Left;
 }
 
-bool Read_Button_RIGHT(void)
+bool Read_Button_Right(void)
 {
-    return Button_RIGHT;
+    return Button_Right;
 }
 
-bool Read_Button_SELECT(void)
+bool Read_Button_Select(void)
 {
-    return Button_SELECT;
+    return Button_Select;
 }
 
-bool Read_Button_START(void)
+bool Read_Button_Start(void)
 {
-    return Button_START;
+    return Button_Start;
 }
 
 //---------------------------------------------------
 void Joystick_Clear_Button_Status(void)
 {
     // Clear Button Status
-    Button_UP = 0;
-    Button_DOWN = 0;
-    Button_LEFT = 0;
-    Button_RIGHT = 0;
-    Button_SELECT = 0;
-    Button_START = 0;
+    Button_Up = 0;
+    Button_Down = 0;
+    Button_Left = 0;
+    Button_Right = 0;
+    Button_Select = 0;
+    Button_Start = 0;
     Button_Status = 0;
 }

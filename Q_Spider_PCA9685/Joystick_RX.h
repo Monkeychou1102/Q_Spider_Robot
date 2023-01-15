@@ -6,10 +6,10 @@
 void Joystick_Receive_Data(unsigned char *Buffer);
 uint16_t Read_X_Axis(void);
 uint16_t Read_Y_Axis(void);
-bool Read_Button_UP(void);
-bool Read_Button_DOWN(void);
-bool Read_Button_LEFT(void);
-bool Read_Button_RIGHT(void);
-bool Read_Button_SELECT(void);
-bool Read_Button_START(void);
+bool Read_Button_Up(void);
+bool Read_Button_Down(void);
+bool Read_Button_Left(void);
+bool Read_Button_Right(void);
+bool Read_Button_Select(void);
+bool Read_Button_Start(void);
 void Joystick_Clear_Button_Status(void);
