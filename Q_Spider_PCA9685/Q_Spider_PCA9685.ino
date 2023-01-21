@@ -29,7 +29,7 @@ char Moving_State = 0;
 //------------------------- Timer1 Interrupt------------------------
 #define Freq_10kHz 100 // 100us -> 10kHz
 // Time counter and event for Timer1 ISR
-unsigned int Tick_01ms = 0, Tick_1ms = 0, Tick_10ms = 0, Tick_100ms = 0, Tick_1000ms = 0;
+unsigned int Tick_01ms = 0;
 unsigned char Event_1ms = 0, Event_10ms = 0, Event_100ms = 0, Event_1000ms = 0;
 // Tick and Counter
 unsigned int Timer1_Tick = 0;
@@ -156,30 +156,22 @@ void Timer1_ISR()
     Tick_01ms++;             // Minimum Tick = 0.1 ms
     if (Tick_01ms % 10 == 0) // 0.1 ms*10 = 1 ms
     {
-        // Event - 1ms
         Event_1ms = 1;
-        Tick_1ms = 0;
     }
 
     if (Tick_01ms % 100 == 0) // 0.1 ms*100 = 10 ms
     {
-        // Event - 10ms
         Event_10ms = 1;
-        Tick_10ms = 0;
     }
 
     if (Tick_01ms % 1000 == 0) // 0.1 ms*1000 = 100 ms
     {
-        // Event - 100ms
         Event_100ms = 1;
-        Tick_100ms = 0;
     }
 
     if (Tick_01ms % 10000 == 0) // 0.1 ms*10000 = 1000 sec
     {
-        // Event - 1000ms
         Event_1000ms = 1;
-        Tick_1000ms = 0;
     }
 }
 
@@ -251,9 +243,10 @@ void Handle_Joystick_Command(void)
     {
         Spider_Standby(Servo_Delay_ms);
     }
-    else // If No Button is Pressed -> Stop Two Wheels first, then Swing Car Head controlled by SG-90
+    else
     {
-        ;
+        // If No Button is Pressed, need to retun, do nothing.
+        return;
     }
 
     Moving_State++;
